@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""BaseModel for Airbnb Project"""
+"""Defines a base model class."""
 import uuid
 from datetime import datetime
 import models
@@ -7,8 +7,28 @@ import models
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
 
-class BaseModel():
-    """Base class for classes"""
+class BaseModel:
+    """
+    Represent the "base" for all other classes in the AirBnB clone
+    project.
+    Attributes:
+        id: string,assigned a unique 'uuid'when an instance is created.
+            Use 'uuid.uuid4()' to generate a unique 'uuid'.
+        created_at: 'datetime' object,assigned the current datetime when
+                    an instance is created.
+        updated_at: 'datetime' object, assigned the current datetime when an
+                    instance is created, and updated every time the object is
+                    changed.
+    Methods:
+        __init__: Initializesa new instance of the
+                                        'BaseModel' class.
+        __str__: Returns a string representation of the 'BaselModel'
+                        in the format '[<class name>] (<id>) <__dict__>.'
+        save: Updates the public instance attribute 'updated_at' with the
+        current datetime.
+        to_dict: Returns a dictionary containing all keys and values of the
+                '__dict__' of the instance.
+    """
 
     def __init__(self, *args, **kwargs):
         """initialization Base
