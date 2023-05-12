@@ -67,7 +67,7 @@ class HBNBCommand(cmd.Cmd):
 
     def __init__(self, completekey='tab'):
         super().__init__(completekey=completekey)
-        self.__models = {'BaseModel': BaseModel}
+        self.__models = {'BaseModel': BaseModel, 'User': User}
         self.__valid_methods = ['create', 'show', 'destroy', 'all', 'update']
         self.allowed_classes = list(self.__models.keys())
         self.__options = [
