@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from models.base_model import BaseModel
 
+
 class User(BaseModel):
     """
     Class that represnt  a user.
@@ -31,6 +32,4 @@ class User(BaseModel):
 
     def __init__(self, *args, **kwargs):
         """Constructor for User class"""
-
-
         super().__init__(*args, **kwargs)
