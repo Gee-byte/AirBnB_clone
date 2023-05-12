@@ -31,6 +31,22 @@ EOF  all  count  create  destroy  help  quit  show  update
 (hbnb) 
 $
 ```
+# Console Commands
+The AirBnB supports the following commands:
+  - create
+    - Usage: ```create <class>```
+
+The ```create``` command allows the user to create a new instance of a given class. The newly created instance's ID is printed to the console and the instance is saved to the ```file.json```.
+```
+$ ./console.py
+(hbnb) create BaseModel
+49faff9a-6318-451f-87b6-910505c55907
+ ```
+
+
+
+
+
 
 
 
