@@ -26,30 +26,33 @@ Examples:
 
 class HBNBCommand(cmd.Cmd):
     """
-    This class defines a command-line interpreter for managing instances of classes that
-    inherit form 'BaseModel'.It allows the user to create, show, destroy, update and list
-    instances of classes, and saves all changes to a JSON file.
+    This class defines a command-line interpreter for managing instances of
+    classes that inherit form 'BaseModel'.It allows the user to create,
+    show, destroy, update and list instances of classes,
+    and saves all changes to a JSON file.
 
     Attributes:
-        prompt (str): The prompt displayed befor the user input. Default value is "(hbnb)".
+        prompt (str): The prompt displayed befor the user input.
+                        Default value is "(hbnb)".
 
     Methods:
         do_quit(args) -> bool:
             Exit the command-line interpreter.
 
         do_EOF(args) -> bool:
-            Exit the command-line interpreter when the end-of-file character is received.
+            Exit the command-line interpreter when the end-of-file
+            character is received.
 
         do_create(line):
             Create a new instance of a class that inherits from `BaseModel`.
 
         do_show(line):
-            Display the string representation of an instance of a class that inherits from
-            `BaseModel`.
+            Display the string representation of an instance of a class
+            that inherits from `BaseModel`.
 
         do_all(line):
-            Display the string representations of all instances of a class that inherits
-            from `BaseModel`.
+            Display the string representations of all instances of a
+            class that inherits from `BaseModel`.
 
         do_destroy(line):
             Delete an instance of a class that inherits from `BaseModel`.
@@ -67,7 +70,11 @@ class HBNBCommand(cmd.Cmd):
         self.__models = {'BaseModel': BaseModel}
         self.__valid_methods = ['create', 'show', 'destroy', 'all', 'update']
         self.allowed_classes = list(self.__models.keys())
-        self.__options = ['{}.{}'.format(k, v) for k, v in self.__models.items() for v in dir(v) if not v.startswith('_')]
+        self.__options = [
+                '{}.{}'.format(k, v)
+                for k, v in self.__models.items()
+                for v in dir(v) if not v.startswith('_')
+                ]
 
     def do_quit(self, args):
         """Quit command to exit the program"""
@@ -79,11 +86,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """Create command to create a new instance of a class"""
-        args = line.split() 
+        args = line.split()
         if not args:
             print("** iclass name missing **")
             return
-        
+
         class_name = args[0]
         if class_name not in self.allowed_classes:
             print("** class doesn't exist **")
@@ -118,7 +125,7 @@ class HBNBCommand(cmd.Cmd):
 
         instance = all_instances[key]
         print(instance)
-    
+
     def do_destroy(self, line):
         """Destroy command to delete an instance"""
         args = line.split()
@@ -143,6 +150,7 @@ class HBNBCommand(cmd.Cmd):
 
         del all_instances[key]
         storage.save()
+
     def do_all(self, line):
         """
         Prints all string representation of all instances based or
@@ -166,7 +174,7 @@ class HBNBCommand(cmd.Cmd):
                 return
 
             instances = [str(all_instances[k]) for k in all_instances
-                    if k.split('.')[0] == class_name]
+                         if k.split('.')[0] == class_name]
             print(instances)
 
     def do_update(self, line):
@@ -219,7 +227,6 @@ class HBNBCommand(cmd.Cmd):
         obj = objs[key_to_update]
         setattr(obj, key, value)
         obj.save()
-
 
 
 if __name__ == '__main__':
