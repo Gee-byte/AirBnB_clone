@@ -24,6 +24,7 @@ class State(BaseModel):
             method to initialize the BaseModel attributes.
     """
     name = ""
+    id = ""
 
     def __init__(self, *args, **kwargs):
         """Constructor for State class"""

@@ -21,8 +21,8 @@ class Review(BaseModel):
         text (str): empty string
 
     """
-    place_id = Place.id
-    user_id = User.id
+    place_id = ""
+    user_id = ""
     text = ""
 
     def __init__(self, *args, **kwargs):
