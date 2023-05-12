@@ -1,4 +1,4 @@
-![alt text](hbnb.png)
+![alt text](assets/hbnb.png)
 
 # AirBnB clone
 
