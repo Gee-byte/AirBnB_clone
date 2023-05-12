@@ -66,7 +66,6 @@ class HBNBCommand(cmd.Cmd):
         do_update(line):
             Update an instance of a class that inherits from `BaseModel`.
 
-
     """
 
     prompt = ' (hbnb) '
@@ -264,6 +263,16 @@ class HBNBCommand(cmd.Cmd):
             instances = [str(obj) for obj in all_instances.values()
                          if type(obj).__name__ == class_name]
             print(instances)
+        elif len(parts) == 2 and parts[1] == "count()":
+            # Retrieve the count of all instances of the specified class
+            class_name = parts[0]
+            if class_name not in self.allowed_classes:
+                print("** class doesn't exist **")
+                return
+            all_instances = storage.all()
+            count = sum(1 for obj in all_instances.values()
+                    if type(obj).__name__ == class_name)
+            print(count)
         else:
             print("*** Unknown syntax: {}".format(line))
 
