@@ -3,6 +3,7 @@
 import json
 import os.path
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -62,7 +63,10 @@ class FileStorage:
     def create_object(info):
         """Create an instance from a dictionary"""
         class_obj = info['__class__']
-        instance = '{}(**info)'.format(class_obj)
+        if class_obj == 'User':
+            instance = 'User(**info)'
+        else:
+            instance = '{}(**info)'.format(class_obj)
         return eval(instance)
 
     def reload(self):
