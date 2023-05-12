@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 from models.base_model import BaseModel
 from models import storage
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import cmd
 
 """
@@ -167,23 +173,30 @@ class HBNBCommand(cmd.Cmd):
             all             Prints all string representaion of all instances
                             from all classes.
 
-            all <class name>Prints all sting representaion of all instances
-                            from the given class name.
+            <class name>.all() Prints all string representaion of all instances
+                                from the given class name.
         """
         args = line.split()
         all_instances = storage.all()
 
-        if len(args) == 0:
-            print([str(all_instances[k]) for k in all_instances])
+        if not args:
+            print([str(key) for key in all_instances.values()])
+            return
         else:
-            class_name = args[0]
-            if class_name not in self.allowed_classes:
-                print("** class doesn't exist **")
+            try:
+                class_name, method_name = line.split('.')
+                if method_name != 'all()':
+                    raise ValueError
+                cls = models.classes[class_name]
+
+                if args[0] not in self.allowed_classes:
+                    print("** class doesn't exist **")
+                return
+            except (ValueError, KeyError):
+                print("** Unknown syntax:", line)
                 return
 
-            instances = [str(all_instances[k]) for k in all_instances
-                         if k.split('.')[0] == class_name]
-            print(instances)
+            print([str(obj) for obj in all_instances.all(cls).values()])
 
     def do_update(self, line):
         """Update command to update an instance"""
@@ -235,6 +248,24 @@ class HBNBCommand(cmd.Cmd):
         obj = objs[key_to_update]
         setattr(obj, key, value)
         obj.save()
+
+    def default(self, line):
+        """
+        Called on an input line when the command prefix is not recognized.
+        """
+        parts = line.split(".")
+        if len(parts) == 2 and parts[1] == "all()":
+            # Retrieve all instances of the specified class
+            class_name = parts[0]
+            if class_name not in self.allowed_classes:
+                print("** class doesn't exist **")
+                return
+            all_instances = storage.all()
+            instances = [str(obj) for obj in all_instances.values()
+                         if type(obj).__name__ == class_name]
+            print(instances)
+        else:
+            print("*** Unknown syntax: {}".format(line))
 
 
 if __name__ == '__main__':
