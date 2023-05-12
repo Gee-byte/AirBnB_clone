@@ -4,6 +4,11 @@ import json
 import os.path
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -11,6 +16,16 @@ class FileStorage:
     to instances"""
     __file_path = "file.json"
     __objects = {}
+
+    __class_constructors = {
+            'BaseModel': BaseModel,
+            'User': User,
+            'Place': Place,
+            'State': State,
+            'City': City,
+            'Amenity': Amenity,
+            'Review': Review
+            }
 
     @staticmethod
     def get_object(class_name, id):
@@ -62,12 +77,12 @@ class FileStorage:
     @staticmethod
     def create_object(info):
         """Create an instance from a dictionary"""
-        class_obj = info['__class__']
-        if class_obj == 'User':
-            instance = 'User(**info)'
+        class_name = info['__class__']
+        constructor = FileStorage.__class_constructors.get(class_name, None)
+        if constructor:
+            return constructor(**info)
         else:
-            instance = '{}(**info)'.format(class_obj)
-        return eval(instance)
+            raise ValueError('Unknown class name: {}'.format(class_name))
 
     def reload(self):
         """Deserializes the JSON file to __objects (only if the JSON file
