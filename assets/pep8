@@ -2,5 +2,5 @@
 
 # This script uses the `pycodestyle` tool to check for PEP 8 compliance in all
 # Python files within the current directory and its subdirectories.
-# Usage: ./check_pep8.sh
+# Usage: ./check_pep8
 find . -name "*.py" | xargs pycodestyle
