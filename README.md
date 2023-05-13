@@ -11,7 +11,7 @@ The console is an interactive command-line interpreter designed to manage the ba
 # Getting Started
 To start using Console, clone the repository from GitHub:
 ```
-$ git clone https://github.com/username/AirBnB_clone.git
+$ git clone https://github.com/HeseltineBTutu/AirBnB_clone.git
 ```
 # Usage
 
