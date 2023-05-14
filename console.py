@@ -56,7 +56,6 @@ class HBNBCommand(cmd.Cmd):
         print("")
         return True
 
-<<<<<<< HEAD
     def help_EOF(self):
         """Display information about EOF signal handling."""
         print("EOF signal to exit the program")
@@ -64,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Do nothing on empty line"""
         pass
-=======
+
     def do_create(self, line):
         """Create command to create a new instance of a class"""
         args = line.split()
@@ -243,7 +242,6 @@ class HBNBCommand(cmd.Cmd):
             print(count)
         else:
             print("*** Unknown syntax: {}".format(line))
->>>>>>> parent of 9509840... added a function to handle empty line  and do nothing
 
 
 if __name__ == '__main__':
