@@ -271,7 +271,7 @@ class HBNBCommand(cmd.Cmd):
                 return
             all_instances = storage.all()
             count = sum(1 for obj in all_instances.values()
-                    if type(obj).__name__ == class_name)
+                        if type(obj).__name__ == class_name)
             print(count)
         else:
             print("*** Unknown syntax: {}".format(line))
