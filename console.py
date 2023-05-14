@@ -54,7 +54,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
-    __classes = ["BaseModel", "User"]
+    __classes = ["BaseModel", "User", "Place", "City", "Amenity", "Review"]
 
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
