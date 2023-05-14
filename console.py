@@ -67,11 +67,9 @@ class HBNBCommand(cmd.Cmd):
             Update an instance of a class that inherits from `BaseModel`.
 
     """
-
-    prompt = ' (hbnb) '
-
     def __init__(self, completekey='tab'):
         super().__init__(completekey=completekey)
+        self.prompt = ' (hbnb) '
         self.__models = {
                 'BaseModel': BaseModel,
                 'User': User,
