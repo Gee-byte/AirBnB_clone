@@ -1,25 +1,6 @@
 #!/usr/bin/python3
+"""Defines the HBnB console."""
 import cmd
-
-"""
-This module defines the HBNBCommand class, a command interpreter that
-implements commands for creating, showing, destroying, updating and listing
-instances of classes that inherit from BaseModel.
-
-Usage:
-    $./console.py
-Inside the console, the user can enter commands in the following format:
-
-(hbnb) command class_name class_id [attribute_name] [attribute_value]
-
-Examples:
-(hbnb) create BaseModel
-(hbnb) show BaseModel 1234-1234-1234
-(hbnb) destroy BaseModel 1234-1234-1234
-(hbnb) all BaseModel
-(hbnb) update BaseModel 1234-1234-1234 email "sara@mail.com"
-
-"""
 
 
 class HBNBCommand(cmd.Cmd):
