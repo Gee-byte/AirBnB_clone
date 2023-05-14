@@ -97,6 +97,10 @@ class HBNBCommand(cmd.Cmd):
         """EOF command to exit the program"""
         return True
 
+    def emptyline(self):
+        """EOF command to exit the program"""
+        pass
+
     def do_create(self, line):
         """Create command to create a new instance of a class"""
         args = line.split()
