@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines a base model class."""
 from datetime import datetime
-import models
+from models import storage
 import uuid
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
