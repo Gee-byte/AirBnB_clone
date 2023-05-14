@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """Defines a base model class."""
-import uuid
 from datetime import datetime
 import models
+import uuid
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
