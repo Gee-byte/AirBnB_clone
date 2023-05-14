@@ -98,6 +98,8 @@ class HBNBCommand(cmd.Cmd):
         if key not in objects:
             print("** no instance found **")
             return
+        obj = objects[key]
+        print(obj.__str__())
 
     def help_show(self):
         """Displays help information for the show command"""
@@ -111,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if args[0] not in HBNBCommand__classes:
+        if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
@@ -125,57 +127,42 @@ class HBNBCommand(cmd.Cmd):
         if key in all_instances:
             del all_instances[key]
             storage.save()
-            print(storage.all())
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         args = arg.split()
 
-        if len(args) == 0:
+        if not args:
             print("** class name missing **")
             return
-
-        class_name = args[0]
-        if class_name not in self.allowed_classes:
+        if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-
-        if len(args) < 2:
+        try:
+            args[1]
+        except Exception:
             print("** instance id missing **")
             return
-
-        obj_id = args[1]
-        key = None
-        value = None
-
-        if len(args) < 3:
-            print("** attribute name missing **")
-            return
-
-        key = args[2]
-
-        if len(args) < 4:
-            print("** value missing **")
-            return
-
-        value_str = args[3]
-        try:
-            value = int(value_str)
-        except ValueError:
-            if value_str.startswith('"') and value_str.endswith('"'):
-                value = value_str[1:-1]
-            else:
-                print("** value missing **")
-                return
-
-        objs = storage.all()
-        key_to_update = class_name + "." + obj_id
-        if key_to_update not in objs:
+        objects_dict = storage.all()
+        my_key = args[0] + "." + args[1]
+        if my_key not in objects_dict:
             print("** no instance found **")
             return
-        obj = objs[key_to_update]
-        setattr(obj, key, value)
-        obj.save()
+        try:
+            args[2]
+        except Exception:
+            print("** attribute name missing **")
+            return
+        try:
+            args[3]
+        except Exception:
+            print("** value missing **")
+            return
+        if args[3]:
+            setattr(objects_dict[my_key], args[2], args[3])
+            storage.save()
+        else:
+            print("** attribute doesn't exist **")
 
     def do_quit(self, arg):
         """Return True upon receiving quit command"""
@@ -210,18 +197,14 @@ class HBNBCommand(cmd.Cmd):
                                 from the given class name.
         """
         tokens = arg.split()
+        objects_dict = storage.all()
+        str_repr_list = []
         class_name = tokens[0]
         if class_name not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        objects_dict = storage.all()
-        print("object dicts = ")
-        print(objects_dict)
-
-        str_repr_list = []
-        if not arg:
-            for key, val in objects_dict.items():
-                str_repr_list.append((objects_dict[key].__str__()))
+        for key, val in objects_dict.items():
+            str_repr_list.append((objects_dict[key].__str__()))
         else:
             for key, val in objects_dict.items():
                 if class_name in key:
