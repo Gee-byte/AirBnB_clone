@@ -3,18 +3,15 @@
 import cmd
 from models.base_model import BaseModel
 from models import storage
-<<<<<<< HEAD
 from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-=======
+
 import re
 import json
->>>>>>> cf8a5c546e01ef67f4abf7c353005dc59700c76a
-
 
 class HBNBCommand(cmd.Cmd):
     """
