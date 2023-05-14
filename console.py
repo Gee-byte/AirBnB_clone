@@ -54,41 +54,24 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
-    def __init__(self):
-        super().__init__()
-        self.instances = {}
-        self.__models = {
-                'BaseModel': BaseModel,
-                'User': User,
-                'State': State,
-                'City': City,
-                'Amenity': Amenity,
-                'Place': Place,
-                'Review': Review
-                }
-        self.__valid_methods = ['create', 'show', 'destroy', 'all', 'update']
-        self.allowed_classes = list(self.__models.keys())
-        self.__options = [
-                '{}.{}'.format(k, v)
-                for k, v in self.__models.items()
-                for v in dir(v) if not v.startswith('_')
-                ]
+    __classes = ["BaseModel"]
 
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
-        args = arg.split()
-        if not args:
-            print("** iclass name missing **")
+        if not arg:
+            print("** class name missing **")
             return
 
-        class_name = args[0]
-        if class_name not in self.allowed_classes:
+        if arg not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        new_instance = BaseModel()
-        storage.new(new_instance)
-        storage.save()
-        print(new_instance.id)
+        model_class = globals()[arg]
+        if model_class is not None:
+            obj = model_class()
+            obj.save()
+            print(obj.id)
+        else:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """Dislay information about the create command."""
@@ -98,12 +81,11 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Prints the string representation of an instance"""
         args = arg.split()
-        if len(args) == 0:
+        if not args:
             print("** class name missing **")
             return
 
-        class_name = args[0]
-        if class_name not in self.allowed_classes:
+        if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
@@ -111,15 +93,11 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        instance_id = args[1]
-        key = class_name + '.' + instance_id
-        all_instances = storage.all()
-        if key not in all_instances:
+        objects = storage.all()
+        key = args[0] + '.' + args[1]
+        if key not in objects:
             print("** no instance found **")
             return
-
-        instance = all_instances[key]
-        print(instance)
 
     def help_show(self):
         """Displays help information for the show command"""
@@ -133,23 +111,21 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        class_name = args[0]
-        if class_name not in self.allowed_classes:
+        if args[0] not in HBNBCommand__classes:
             print("** class doesn't exist **")
             return
 
         if len(args) < 2:
             print("** instance id missing **")
             return
-        instance_id = args[1]
-        key = class_name + '.' + instance_id
-        all_instances = storage.all()
-        if key not in all_instances:
+        if not args[1]:
             print("** no instance found **")
-            return
-
-        del all_instances[key]
-        storage.save()
+        key = args[0] + '.' + args[1]
+        all_instances = storage.all()
+        if key in all_instances:
+            del all_instances[key]
+            storage.save()
+            print(storage.all())
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
@@ -222,32 +198,6 @@ class HBNBCommand(cmd.Cmd):
         """Do nothing on empty line"""
         pass
 
-    def do_show(self, line):
-        """Show command to print the string representation of an instance"""
-        args = line.split()
-        if len(args) == 0:
-            print("** class name missing **")
-            return
-
-        class_name = args[0]
-        if class_name not in self.allowed_classes:
-            print("** class doesn't exist **")
-            return
-
-        if len(args) < 2:
-            print("** instance id missing **")
-            return
-
-        instance_id = args[1]
-        key = class_name + '.' + instance_id
-        all_instances = storage.all()
-        if key not in all_instances:
-            print("** no instance found **")
-            return
-
-        instance = all_instances[key]
-        print(instance)
-
     def do_all(self, arg):
         """
         Prints all string representation of all instances based or
@@ -259,45 +209,24 @@ class HBNBCommand(cmd.Cmd):
             <class name>.all() Prints all string representaion of all instances
                                 from the given class name.
         """
-        if not arg:
-            print("class name missing")
+        tokens = arg.split()
+        class_name = tokens[0]
+        if class_name not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
             return
-        if arg not in self.__models:
-            print("class doesn't exist")
-            return
-        result = []
-        for instance in self.instances.values():
-            if arg == "*" or instance["__class__"] == arg:
-                result.append(json.dumps(instance, indent=4))
-                print("\n".join(result))
+        objects_dict = storage.all()
+        print("object dicts = ")
+        print(objects_dict)
 
-    def default(self, line):
-        """
-        Called on an input line when the command prefix is not recognized.
-        """
-        parts = line.split(".")
-        if len(parts) == 2 and parts[1] == "all()":
-            # Retrieve all instances of the specified class
-            class_name = parts[0]
-            if class_name not in self.allowed_classes:
-                print("** class doesn't exist **")
-                return
-            all_instances = storage.all()
-            instances = [str(obj) for obj in all_instances.values()
-                         if type(obj).__name__ == class_name]
-            print(instances)
-        elif len(parts) == 2 and parts[1] == "count()":
-            # Retrieve the count of all instances of the specified class
-            class_name = parts[0]
-            if class_name not in self.allowed_classes:
-                print("** class doesn't exist **")
-                return
-            all_instances = storage.all()
-            count = sum(1 for obj in all_instances.values()
-                        if type(obj).__name__ == class_name)
-            print(count)
+        str_repr_list = []
+        if not arg:
+            for key, val in objects_dict.items():
+                str_repr_list.append((objects_dict[key].__str__()))
         else:
-            print("*** Unknown syntax: {}".format(line))
+            for key, val in objects_dict.items():
+                if class_name in key:
+                    str_repr_list.append((objects_dict[key].__str__()))
+                    print(str_repr_list)
 
 
 if __name__ == '__main__':
