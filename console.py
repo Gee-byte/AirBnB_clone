@@ -207,12 +207,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         for key, val in objects_dict.items():
-            str_repr_list.append((objects_dict[key].__str__()))
+            if class_name in key:
+                str_repr_list.append((objects_dict[key].__str__()))
         else:
             for key, val in objects_dict.items():
                 if class_name in key:
                     str_repr_list.append((objects_dict[key].__str__()))
-                    print(str_repr_list)
+        print(str_repr_list)
 
 
 if __name__ == '__main__':
