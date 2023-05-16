@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
         
         key = args[0] + '.' + args[1]
         all_instances = storage.all()
-        if key not in all_instances:
+        if key not in all_instances.keys():
             print("** no instance found **")
             return
 
