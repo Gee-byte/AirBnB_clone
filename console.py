@@ -196,26 +196,20 @@ class HBNBCommand(cmd.Cmd):
             all             Prints all string representaion of all instances
                             from all classes.
 
-            <class name>.all() Prints all string representaion of all instances
+            all <class name> Prints all string representaion of all instances
                                 from the given class name.
         """
         tokens = arg.split()
-        if not tokens:
-            return "OK"
-
         objects_dict = storage.all()
-        str_repr_list = []
-        class_name = tokens[0]
-        if class_name not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-            return
-        for key, val in objects_dict.items():
-            if class_name in key:
-                str_repr_list.append((objects_dict[key].__str__()))
+        if not tokens:
+            str_repr_list = [str(obj) for obj in objects_dict.values()]
         else:
-            for key, val in objects_dict.items():
-                if class_name in key:
-                    str_repr_list.append((objects_dict[key].__str__()))
+            class_name = tokens[0]
+            if class_name not in HBNBCommand.__classes:
+                print("** class doesn't exist **")
+                return
+            str_repr_list = [str(obj) for obj in objects_dict.values()
+                             if type(obj).__name__ == class_name]
         print(str_repr_list)
 
 
