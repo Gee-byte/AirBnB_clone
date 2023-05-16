@@ -239,6 +239,7 @@ class HBNBCommand(cmd.Cmd):
         all_pattern = re.compile(r'^(\w+)\.all\(\)$')
         count_pattern = re.compile(r'^(\w+)\.count\(\)$')
         show_pattern = re.compile(r'^(\w+)\.show\(\"([\w-]+)\"\)$')
+        destroy_pattern = re.compile(r'^(\w+)\.destroy\(\"([\w-]+)\"\)$')
 
         # Match input against regex patterns
         match = all_pattern.match(arg)
@@ -259,6 +260,16 @@ class HBNBCommand(cmd.Cmd):
             class_name = match.group(1)
             obj_id = match.group(2)
             self.do_show(f"{class_name} {obj_id}")
+            return
+        match = destroy_pattern.match(arg)
+        if match:
+            class_name = match.group(1)
+            obj_id = match.group(2)
+            key = class_name + '.' + obj_id
+            objs = storage.all()
+            if key in objs:
+                objs.pop(key)
+                storage.save()
             return
 
         # If input doesn't match any pattern, print an error message
