@@ -270,7 +270,10 @@ class HBNBCommand(cmd.Cmd):
             if key in objs:
                 objs.pop(key)
                 storage.save()
-            return
+                return
+            else:
+                print(f"** no instance found **")
+                return
 
         # If input doesn't match any pattern, print an error message
         print(f"*** Unknown syntax: {arg}")
