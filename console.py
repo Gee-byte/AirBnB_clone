@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
         """
         tokens = arg.split()
         if not tokens:
-            return
+            return "OK"
 
         objects_dict = storage.all()
         str_repr_list = []
