@@ -230,6 +230,18 @@ class HBNBCommand(cmd.Cmd):
                 self.do_all(class_name)
             elif len(tokens) == 2 and tokens[1] == "all()":
                 self.do_all(class_name)
+            elif '.' in arg:
+                tokens = arg.split('.')
+                if len(tokens) == 2 and tokens[1] == "count()":
+                    if tokens[0] not in HBNBCommand.__classes:
+                        print("** class doesn't exist **")
+                    else:
+                        count = 0
+                        objects_dict = storage.all()
+                        for key, val in objects_dict.items():
+                            if tokens[0] in key:
+                                count += 1
+                        print(count)
             else:
                 print("*** Unknown syntax: {}".format(arg))
         else:
