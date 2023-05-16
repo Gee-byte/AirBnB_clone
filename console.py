@@ -243,7 +243,7 @@ class HBNBCommand(cmd.Cmd):
         update_pattern1 = re.compile(r'^(\w+)\.update\(\"([\w-]+)\", '
                                      r'\"([\w\s_]+)\", \"([\w\s_]+)\"\)$')
         update_pattern2 = re.compile(r'^(\w+)\.update\(\"(\w+)'
-                                    r'\"\,\s*\{(.+)\}\)$')
+                                     r'\"\,\s*\{(.+)\}\)$')
 
         # Match input against regex patterns
         match = all_pattern.match(arg)
