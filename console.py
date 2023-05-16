@@ -200,6 +200,9 @@ class HBNBCommand(cmd.Cmd):
                                 from the given class name.
         """
         tokens = arg.split()
+        if not tokens:
+            return
+
         objects_dict = storage.all()
         str_repr_list = []
         class_name = tokens[0]
