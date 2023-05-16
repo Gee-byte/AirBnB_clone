@@ -11,6 +11,7 @@ from models.place import Place
 from models.review import Review
 import re
 import json
+import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -229,6 +230,43 @@ class HBNBCommand(cmd.Cmd):
             if type(obj).__name__ == class_name:
                 count += 1
         return count
+
+    def do_update_dict(self, arg):
+        """
+        Updates an instance based on its ID with
+        a dictionary representation.
+        Usage: <class name>.update(<id>, <dictionary representation>)
+        """
+        args = shlex.split(arg)
+        if len(args) < 3:
+            print("** class name missing **")
+            return
+        class_name = args[0]
+        if class_name not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        obj_id = args[1]
+        key = class_name + '.' + obj_id
+        objs = storage.all()
+        if key not in objs:
+            print("** no instance found **")
+            return
+        if len(args) < 3:
+            print("** dictionary missing **")
+            return
+        try:
+            # Convert the dictionary string to a dictionary object
+            update_dict = json.loads(args[2])
+        except ValueError:
+            print("** invalid JSON **")
+            return
+        obj = objs[key]
+        for attr, value in update_dict.items():
+            setattr(obj, attr, value)
+            storage.save()
 
     def default(self, arg):
         """
