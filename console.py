@@ -219,6 +219,22 @@ class HBNBCommand(cmd.Cmd):
                              if type(obj).__name__ == class_name]
         print(str_repr_list)
 
+    def default(self, arg):
+        """
+        Called on an input line when the command prefix is not recognized.
+        """
+        tokens = arg.split(".")
+        class_name = tokens[0]
+        if class_name in HBNBCommand.__classes:
+            if len(tokens) == 1:
+                self.do_all(class_name)
+            elif len(tokens) == 2 and tokens[1] == "all()":
+                self.do_all(class_name)
+            else:
+                print("*** Unknown syntax: {}".format(arg))
+        else:
+            print("*** Unknown syntax: {}".format(arg))
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
