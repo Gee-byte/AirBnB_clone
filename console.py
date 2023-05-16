@@ -54,7 +54,15 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
-    __classes = ["BaseModel", "User", "Place", "City", "Amenity", "Review"]
+    __classes = [
+            "BaseModel",
+            "User",
+            "State",
+            "Place",
+            "City",
+            "Amenity",
+            "Review"
+            ]
 
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
@@ -120,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 2:
             print("** instance id missing **")
             return
-        
+
         key = args[0] + '.' + args[1]
         all_instances = storage.all()
         if key not in all_instances.keys():
