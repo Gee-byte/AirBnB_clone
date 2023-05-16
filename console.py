@@ -203,7 +203,7 @@ class HBNBCommand(cmd.Cmd):
             all             Prints all string representaion of all instances
                             from all classes.
 
-            <class name>.all() Prints all string representaion of all instances
+            all() <class name) Prints all string representaion of all instances
                                 from the given class name.
         """
         tokens = arg.split()
@@ -217,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
                 return
             str_repr_list = [str(obj) for obj in objects_dict.values()
                              if type(obj).__name__ == class_name]
-            print(str_repr_list)
+        print(str_repr_list)
 
 
 if __name__ == '__main__':
