@@ -124,9 +124,12 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         key = args[0] + '.' + args[1]
         all_instances = storage.all()
-        if key in all_instances:
-            del all_instances[key]
-            storage.save()
+        if key not in all_instances:
+            print("** no instance found **")
+            return
+
+        del all_instances[key]
+        storage.save()
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
