@@ -219,33 +219,50 @@ class HBNBCommand(cmd.Cmd):
                              if type(obj).__name__ == class_name]
         print(str_repr_list)
 
+    def do_count(self, class_name):
+        """
+        Retrieves the number of instances of a given class.
+
+        """
+        count = 0
+        for obj_id, obj in storage.all().items():
+            if type(obj).__name__ == class_name:
+                count += 1
+        return count
+
     def default(self, arg):
         """
-        Called on an input line when the command prefix is not recognized.
+        Parses input for the format <class name>.<method>() and calls the
+        corresponding method.
         """
-        tokens = arg.split(".")
-        class_name = tokens[0]
-        if class_name in HBNBCommand.__classes:
-            if len(tokens) == 1:
-                self.do_all(class_name)
-            elif len(tokens) == 2 and tokens[1] == "all()":
-                self.do_all(class_name)
-            elif '.' in arg:
-                tokens = arg.split('.')
-                if len(tokens) == 2 and tokens[1] == "count()":
-                    if tokens[0] not in HBNBCommand.__classes:
-                        print("** class doesn't exist **")
-                    else:
-                        count = 0
-                        objects_dict = storage.all()
-                        for key, val in objects_dict.items():
-                            if tokens[0] in key:
-                                count += 1
-                        print(count)
-            else:
-                print("*** Unknown syntax: {}".format(arg))
-        else:
-            print("*** Unknown syntax: {}".format(arg))
+        # Define regex patterns for valid commands
+        all_pattern = re.compile(r'^(\w+)\.all\(\)$')
+        count_pattern = re.compile(r'^(\w+)\.count\(\)$')
+        show_pattern = re.compile(r'^(\w+)\.show\(\"([\w-]+)\"\)$')
+
+        # Match input against regex patterns
+        match = all_pattern.match(arg)
+        if match:
+            class_name = match.group(1)
+            self.do_all(class_name)
+            return
+
+        match = count_pattern.match(arg)
+        if match:
+            class_name = match.group(1)
+            count = self.do_count(class_name)
+            print(count)
+            return
+
+        match = show_pattern.match(arg)
+        if match:
+            class_name = match.group(1)
+            obj_id = match.group(2)
+            self.do_show(f"{class_name} {obj_id}")
+            return
+
+        # If input doesn't match any pattern, print an error message
+        print(f"*** Unknown syntax: {arg}")
 
 
 if __name__ == '__main__':
