@@ -240,6 +240,8 @@ class HBNBCommand(cmd.Cmd):
         count_pattern = re.compile(r'^(\w+)\.count\(\)$')
         show_pattern = re.compile(r'^(\w+)\.show\(\"([\w-]+)\"\)$')
         destroy_pattern = re.compile(r'^(\w+)\.destroy\(\"([\w-]+)\"\)$')
+        update_pattern = re.compile(r'^(\w+)\.update\(\"([\w-]+)\", '
+                                    r'\"([\w\s_]+)\", \"([\w\s_]+)\"\)$')
 
         # Match input against regex patterns
         match = all_pattern.match(arg)
@@ -274,6 +276,14 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(f"** no instance found **")
                 return
+        match = update_pattern.match(arg)
+        if match:
+            class_name = match.group(1)
+            obj_id = match.group(2)
+            attr_name = match.group(3)
+            attr_value = match.group(4)
+            self.do_update(f"{class_name} {obj_id} {attr_name} {attr_value}")
+            return
 
         # If input doesn't match any pattern, print an error message
         print(f"*** Unknown syntax: {arg}")
