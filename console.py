@@ -11,7 +11,6 @@ from models.place import Place
 from models.review import Review
 import re
 import json
-import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -231,43 +230,6 @@ class HBNBCommand(cmd.Cmd):
                 count += 1
         return count
 
-    def do_update_dict(self, arg):
-        """
-        Updates an instance based on its ID with
-        a dictionary representation.
-        Usage: <class name>.update(<id>, <dictionary representation>)
-        """
-        args = shlex.split(arg)
-        if len(args) < 3:
-            print("** class name missing **")
-            return
-        class_name = args[0]
-        if class_name not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-            return
-        if len(args) < 2:
-            print("** instance id missing **")
-            return
-        obj_id = args[1]
-        key = class_name + '.' + obj_id
-        objs = storage.all()
-        if key not in objs:
-            print("** no instance found **")
-            return
-        if len(args) < 3:
-            print("** dictionary missing **")
-            return
-        try:
-            # Convert the dictionary string to a dictionary object
-            update_dict = json.loads(args[2])
-        except ValueError:
-            print("** invalid JSON **")
-            return
-        obj = objs[key]
-        for attr, value in update_dict.items():
-            setattr(obj, attr, value)
-            storage.save()
-
     def default(self, arg):
         """
         Parses input for the format <class name>.<method>() and calls the
@@ -278,8 +240,10 @@ class HBNBCommand(cmd.Cmd):
         count_pattern = re.compile(r'^(\w+)\.count\(\)$')
         show_pattern = re.compile(r'^(\w+)\.show\(\"([\w-]+)\"\)$')
         destroy_pattern = re.compile(r'^(\w+)\.destroy\(\"([\w-]+)\"\)$')
-        update_pattern = re.compile(r'^(\w+)\.update\(\"([\w-]+)\", '
-                                    r'\"([\w\s_]+)\", \"([\w\s_]+)\"\)$')
+        update_pattern1 = re.compile(r'^(\w+)\.update\(\"([\w-]+)\", '
+                                     r'\"([\w\s_]+)\", \"([\w\s_]+)\"\)$')
+        update_pattern2 = re.compile(r'^(\w+)\.update\(\"(\w+)'
+                                    r'\"\,\s*\{(.+)\}\)$')
 
         # Match input against regex patterns
         match = all_pattern.match(arg)
@@ -314,13 +278,24 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(f"** no instance found **")
                 return
-        match = update_pattern.match(arg)
+        match = update_pattern1.match(arg)
         if match:
             class_name = match.group(1)
             obj_id = match.group(2)
             attr_name = match.group(3)
             attr_value = match.group(4)
             self.do_update(f"{class_name} {obj_id} {attr_name} {attr_value}")
+            return
+
+        match = update_pattern2.match(arg)
+        if match:
+            class_name = match.group(1)
+            obj_id = match.group(2)
+            dict_repr = match.group(3)
+            dict_repr = dict_repr.replace("'", "\"")
+            dict_obj = json.loads(dict_repr)
+            for key, value in dict_obj.items():
+                self.do_update(f"{class_name} {obj_id} {key} \"{value}\"")
             return
 
         # If input doesn't match any pattern, print an error message
